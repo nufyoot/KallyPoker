@@ -3,7 +3,7 @@
 public readonly struct Face
 {
     private const ulong BaseMask = 0b0000000000000001000000000000000100000000000000010000000000000001UL;
-    private readonly ulong _mask;
+    public readonly ulong Mask;
 
     public static readonly Face Twos = new(BaseMask);
     public static readonly Face Threes = new(BaseMask << 1);
@@ -19,7 +19,10 @@ public readonly struct Face
     public static readonly Face Kings = new(BaseMask << 11);
     public static readonly Face Aces = new(BaseMask << 12);
 
-    private Face(ulong mask) => _mask = mask;
+    private Face(ulong mask) => Mask = mask;
 
-    public static explicit operator ulong(Face face) => face._mask;
+    public static explicit operator ulong(Face face) => face.Mask;
+    
+    public static ulong operator &(Face face, Suit suit) => face.Mask & suit.Mask;
+    public static ulong operator &(Face face, ulong value) => face.Mask & value;
 }
