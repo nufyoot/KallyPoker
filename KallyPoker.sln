@@ -1,8 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KallyPoker", "KallyPoker\KallyPoker.csproj", "{A4D8A144-CCE0-453F-BDD6-3F4B74DD5AA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KallyPoker.Tests", "KallyPoker.Tests\KallyPoker.Tests.csproj", "{B4AE53D9-C7D2-4BCD-8052-76A26FE52940}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A4D8A144-CCE0-453F-BDD6-3F4B74DD5AA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4D8A144-CCE0-453F-BDD6-3F4B74DD5AA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4D8A144-CCE0-453F-BDD6-3F4B74DD5AA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4D8A144-CCE0-453F-BDD6-3F4B74DD5AA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4AE53D9-C7D2-4BCD-8052-76A26FE52940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4AE53D9-C7D2-4BCD-8052-76A26FE52940}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4AE53D9-C7D2-4BCD-8052-76A26FE52940}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4AE53D9-C7D2-4BCD-8052-76A26FE52940}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
