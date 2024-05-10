@@ -2,7 +2,7 @@
 
 public readonly struct Face
 {
-    private const ulong BaseMask = 0b0000000000000001000000000000000100000000000000010000000000000001;
+    private const ulong BaseMask = 0b0000000000000001000000000000000100000000000000010000000000000001UL;
     private readonly ulong _mask;
 
     public static readonly Face Twos = new(BaseMask);
