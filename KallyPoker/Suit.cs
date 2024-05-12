@@ -1,15 +1,18 @@
 ﻿namespace KallyPoker;
 
-public readonly struct Suit
+public readonly struct Suit(ulong mask)
 {
-    public readonly ulong Mask;
+    public readonly ulong Mask = mask;
 
-    public static readonly Suit Clubs = new(0b1111111111111111UL);
-    public static readonly Suit Diamonds = new(0b1111111111111111UL << 16);
-    public static readonly Suit Hearts = new(0b1111111111111111UL << 32);
-    public static readonly Suit Spades = new(0b1111111111111111UL << 48);
+    public const ulong ClubsMask = 0b0001111111111111UL;
+    public const ulong DiamondsMask = 0b0001111111111111UL << 16;
+    public const ulong HeartsMask = 0b0001111111111111UL << 32;
+    public const ulong SpadesMask = 0b0001111111111111UL << 48;
 
-    private Suit(ulong mask) => Mask = mask;
+    public static readonly Suit Clubs = new(ClubsMask);
+    public static readonly Suit Diamonds = new(DiamondsMask);
+    public static readonly Suit Hearts = new(HeartsMask);
+    public static readonly Suit Spades = new(SpadesMask);
 
     public static explicit operator ulong(Suit suit) => suit.Mask;
 

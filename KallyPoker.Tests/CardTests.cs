@@ -2,75 +2,62 @@
 
 public class CardTests
 {
-    [Fact]
-    public void TestClubStrings()
+    [Theory]
+    [InlineData(Suit.ClubsMask, Face.TwosMask, "2C")]
+    [InlineData(Suit.ClubsMask, Face.ThreesMask, "3C")]
+    [InlineData(Suit.ClubsMask, Face.FoursMask, "4C")]
+    [InlineData(Suit.ClubsMask, Face.FivesMask, "5C")]
+    [InlineData(Suit.ClubsMask, Face.SixesMask, "6C")]
+    [InlineData(Suit.ClubsMask, Face.SevensMask, "7C")]
+    [InlineData(Suit.ClubsMask, Face.EightsMask, "8C")]
+    [InlineData(Suit.ClubsMask, Face.NinesMask, "9C")]
+    [InlineData(Suit.ClubsMask, Face.TensMask, "TC")]
+    [InlineData(Suit.ClubsMask, Face.JacksMask, "JC")]
+    [InlineData(Suit.ClubsMask, Face.QueensMask, "QC")]
+    [InlineData(Suit.ClubsMask, Face.KingsMask, "KC")]
+    [InlineData(Suit.ClubsMask, Face.AcesMask, "AC")]
+    [InlineData(Suit.DiamondsMask, Face.TwosMask, "2D")]
+    [InlineData(Suit.DiamondsMask, Face.ThreesMask, "3D")]
+    [InlineData(Suit.DiamondsMask, Face.FoursMask, "4D")]
+    [InlineData(Suit.DiamondsMask, Face.FivesMask, "5D")]
+    [InlineData(Suit.DiamondsMask, Face.SixesMask, "6D")]
+    [InlineData(Suit.DiamondsMask, Face.SevensMask, "7D")]
+    [InlineData(Suit.DiamondsMask, Face.EightsMask, "8D")]
+    [InlineData(Suit.DiamondsMask, Face.NinesMask, "9D")]
+    [InlineData(Suit.DiamondsMask, Face.TensMask, "TD")]
+    [InlineData(Suit.DiamondsMask, Face.JacksMask, "JD")]
+    [InlineData(Suit.DiamondsMask, Face.QueensMask, "QD")]
+    [InlineData(Suit.DiamondsMask, Face.KingsMask, "KD")]
+    [InlineData(Suit.DiamondsMask, Face.AcesMask, "AD")]
+    [InlineData(Suit.HeartsMask, Face.TwosMask, "2H")]
+    [InlineData(Suit.HeartsMask, Face.ThreesMask, "3H")]
+    [InlineData(Suit.HeartsMask, Face.FoursMask, "4H")]
+    [InlineData(Suit.HeartsMask, Face.FivesMask, "5H")]
+    [InlineData(Suit.HeartsMask, Face.SixesMask, "6H")]
+    [InlineData(Suit.HeartsMask, Face.SevensMask, "7H")]
+    [InlineData(Suit.HeartsMask, Face.EightsMask, "8H")]
+    [InlineData(Suit.HeartsMask, Face.NinesMask, "9H")]
+    [InlineData(Suit.HeartsMask, Face.TensMask, "TH")]
+    [InlineData(Suit.HeartsMask, Face.JacksMask, "JH")]
+    [InlineData(Suit.HeartsMask, Face.QueensMask, "QH")]
+    [InlineData(Suit.HeartsMask, Face.KingsMask, "KH")]
+    [InlineData(Suit.HeartsMask, Face.AcesMask, "AH")]
+    [InlineData(Suit.SpadesMask, Face.TwosMask, "2S")]
+    [InlineData(Suit.SpadesMask, Face.ThreesMask, "3S")]
+    [InlineData(Suit.SpadesMask, Face.FoursMask, "4S")]
+    [InlineData(Suit.SpadesMask, Face.FivesMask, "5S")]
+    [InlineData(Suit.SpadesMask, Face.SixesMask, "6S")]
+    [InlineData(Suit.SpadesMask, Face.SevensMask, "7S")]
+    [InlineData(Suit.SpadesMask, Face.EightsMask, "8S")]
+    [InlineData(Suit.SpadesMask, Face.NinesMask, "9S")]
+    [InlineData(Suit.SpadesMask, Face.TensMask, "TS")]
+    [InlineData(Suit.SpadesMask, Face.JacksMask, "JS")]
+    [InlineData(Suit.SpadesMask, Face.QueensMask, "QS")]
+    [InlineData(Suit.SpadesMask, Face.KingsMask, "KS")]
+    [InlineData(Suit.SpadesMask, Face.AcesMask, "AS")]
+    public void TestStrings(ulong suitMask, ulong faceMask, string expected)
     {
-        Assert.Equal("2C", new Card(Suit.Clubs, Face.Twos).ToString());
-        Assert.Equal("3C", new Card(Suit.Clubs, Face.Threes).ToString());
-        Assert.Equal("4C", new Card(Suit.Clubs, Face.Fours).ToString());
-        Assert.Equal("5C", new Card(Suit.Clubs, Face.Fives).ToString());
-        Assert.Equal("6C", new Card(Suit.Clubs, Face.Sixes).ToString());
-        Assert.Equal("7C", new Card(Suit.Clubs, Face.Sevens).ToString());
-        Assert.Equal("8C", new Card(Suit.Clubs, Face.Eights).ToString());
-        Assert.Equal("9C", new Card(Suit.Clubs, Face.Nines).ToString());
-        Assert.Equal("TC", new Card(Suit.Clubs, Face.Tens).ToString());
-        Assert.Equal("JC", new Card(Suit.Clubs, Face.Jacks).ToString());
-        Assert.Equal("QC", new Card(Suit.Clubs, Face.Queens).ToString());
-        Assert.Equal("KC", new Card(Suit.Clubs, Face.Kings).ToString());
-        Assert.Equal("AC", new Card(Suit.Clubs, Face.Aces).ToString());
-    }
-    
-    [Fact]
-    public void TestDiamondStrings()
-    {
-        Assert.Equal("2D", new Card(Suit.Diamonds, Face.Twos).ToString());
-        Assert.Equal("3D", new Card(Suit.Diamonds, Face.Threes).ToString());
-        Assert.Equal("4D", new Card(Suit.Diamonds, Face.Fours).ToString());
-        Assert.Equal("5D", new Card(Suit.Diamonds, Face.Fives).ToString());
-        Assert.Equal("6D", new Card(Suit.Diamonds, Face.Sixes).ToString());
-        Assert.Equal("7D", new Card(Suit.Diamonds, Face.Sevens).ToString());
-        Assert.Equal("8D", new Card(Suit.Diamonds, Face.Eights).ToString());
-        Assert.Equal("9D", new Card(Suit.Diamonds, Face.Nines).ToString());
-        Assert.Equal("TD", new Card(Suit.Diamonds, Face.Tens).ToString());
-        Assert.Equal("JD", new Card(Suit.Diamonds, Face.Jacks).ToString());
-        Assert.Equal("QD", new Card(Suit.Diamonds, Face.Queens).ToString());
-        Assert.Equal("KD", new Card(Suit.Diamonds, Face.Kings).ToString());
-        Assert.Equal("AD", new Card(Suit.Diamonds, Face.Aces).ToString());
-    }
-    
-    [Fact]
-    public void TestHeartStrings()
-    {
-        Assert.Equal("2H", new Card(Suit.Hearts, Face.Twos).ToString());
-        Assert.Equal("3H", new Card(Suit.Hearts, Face.Threes).ToString());
-        Assert.Equal("4H", new Card(Suit.Hearts, Face.Fours).ToString());
-        Assert.Equal("5H", new Card(Suit.Hearts, Face.Fives).ToString());
-        Assert.Equal("6H", new Card(Suit.Hearts, Face.Sixes).ToString());
-        Assert.Equal("7H", new Card(Suit.Hearts, Face.Sevens).ToString());
-        Assert.Equal("8H", new Card(Suit.Hearts, Face.Eights).ToString());
-        Assert.Equal("9H", new Card(Suit.Hearts, Face.Nines).ToString());
-        Assert.Equal("TH", new Card(Suit.Hearts, Face.Tens).ToString());
-        Assert.Equal("JH", new Card(Suit.Hearts, Face.Jacks).ToString());
-        Assert.Equal("QH", new Card(Suit.Hearts, Face.Queens).ToString());
-        Assert.Equal("KH", new Card(Suit.Hearts, Face.Kings).ToString());
-        Assert.Equal("AH", new Card(Suit.Hearts, Face.Aces).ToString());
-    }
-    
-    [Fact]
-    public void TestSpaceStrings()
-    {
-        Assert.Equal("2S", new Card(Suit.Spades, Face.Twos).ToString());
-        Assert.Equal("3S", new Card(Suit.Spades, Face.Threes).ToString());
-        Assert.Equal("4S", new Card(Suit.Spades, Face.Fours).ToString());
-        Assert.Equal("5S", new Card(Suit.Spades, Face.Fives).ToString());
-        Assert.Equal("6S", new Card(Suit.Spades, Face.Sixes).ToString());
-        Assert.Equal("7S", new Card(Suit.Spades, Face.Sevens).ToString());
-        Assert.Equal("8S", new Card(Suit.Spades, Face.Eights).ToString());
-        Assert.Equal("9S", new Card(Suit.Spades, Face.Nines).ToString());
-        Assert.Equal("TS", new Card(Suit.Spades, Face.Tens).ToString());
-        Assert.Equal("JS", new Card(Suit.Spades, Face.Jacks).ToString());
-        Assert.Equal("QS", new Card(Suit.Spades, Face.Queens).ToString());
-        Assert.Equal("KS", new Card(Suit.Spades, Face.Kings).ToString());
-        Assert.Equal("AS", new Card(Suit.Spades, Face.Aces).ToString());
+        var actual = new Card(new Suit(suitMask), new Face(faceMask)).ToString();
+        Assert.Equal(expected, actual);
     }
 }
