@@ -37,6 +37,8 @@ public struct CardCollection
     }
 
     public static CardCollection operator |(CardCollection cards, Card card) => new(cards.Value | card.Value);
+    public static CardCollection operator &(CardCollection cards, Face face) => new(cards.Value & face.Mask);
+    public static implicit operator ulong(CardCollection cards) => cards.Value;
 
     public void Add(Card card) => Value |= card;
     public void Remove(Card card) => Value &= ~card;
