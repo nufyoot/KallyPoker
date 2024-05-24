@@ -13,9 +13,4 @@ public readonly struct Suit(ulong mask)
     public static readonly Suit Diamonds = new(DiamondsMask);
     public static readonly Suit Hearts = new(HeartsMask);
     public static readonly Suit Spades = new(SpadesMask);
-
-    public static explicit operator ulong(Suit suit) => suit.Mask;
-
-    public static ulong operator &(Suit suit, Face face) => suit.Mask & face.Mask;
-    public static ulong operator &(Suit suit, ulong value) => suit.Mask & value;
 }

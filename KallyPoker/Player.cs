@@ -11,8 +11,5 @@ public struct Player(CardCollection cards)
         Money = money;
     }
     
-    public void AddCard(Card card)
-    {
-        Cards |= card;
-    }
+    public void AddCard(Card card) => Cards.Add(card);
 }

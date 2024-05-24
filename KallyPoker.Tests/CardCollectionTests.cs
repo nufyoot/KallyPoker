@@ -11,8 +11,9 @@ public class CardCollectionTests
     [InlineData("9C,AH", "AH,9C")]
     public void TestConstruction(string cards, string expected)
     {
-        var cardCollection = new CardCollection(cards);
-        Assert.Equal(expected, cardCollection.ToString());
+        var cardCollection = CardCollection.Parse(cards);
+        Assert.False(cardCollection.HasError);
+        Assert.Equal(expected, cardCollection.Result.ToString());
     }
 
     [Fact]

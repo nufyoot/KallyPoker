@@ -32,9 +32,4 @@ public readonly struct Face(ulong mask)
     public static readonly Face Queens = new(QueensMask);
     public static readonly Face Kings = new(KingsMask);
     public static readonly Face Aces = new(AcesMask);
-
-    public static explicit operator ulong(Face face) => face.Mask;
-    
-    public static ulong operator &(Face face, Suit suit) => face.Mask & suit.Mask;
-    public static ulong operator &(Face face, ulong value) => face.Mask & value;
 }

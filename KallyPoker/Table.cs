@@ -9,8 +9,5 @@ public struct Table(CardCollection cards)
         Cards = new CardCollection(0);
     }
     
-    public void AddCard(Card card)
-    {
-        Cards |= card;
-    }
+    public void AddCard(Card card) => Cards.Add(card);
 }
