@@ -64,6 +64,21 @@ public struct CardCollection(ulong value)
         return result;
     }
 
+    public CardCollection Filter(Suit face)
+    {
+        return new CardCollection(Value & face.Mask);
+    }
+
+    public CardCollection Intersect(CardCollection other)
+    {
+        return new CardCollection(Value & other.Value);
+    }
+
+    public CardCollection GetClubs() => Filter(Suit.Clubs);
+    public CardCollection GetDiamonds() => Filter(Suit.Diamonds);
+    public CardCollection GetHearts() => Filter(Suit.Hearts);
+    public CardCollection GetSpades() => Filter(Suit.Spades);
+
     public override string ToString()
     {
         return string.Join(",", ToArray().Select(c => c.ToString()));
