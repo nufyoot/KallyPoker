@@ -19,43 +19,23 @@ public static class HandChecker
 
     public static HandResult GetBestHand(CardCollection cards)
     {
-        var royalFlush = GetRoyalFlush(cards);
-        if (!royalFlush.IsEmpty)
-            return royalFlush;
-
-        var straightFlush = GetStraightFlush(cards);
-        if (!straightFlush.IsEmpty)
-            return straightFlush;
-
-        var fourKind = GetFourKind(cards);
-        if (!fourKind.IsEmpty)
-            return fourKind;
-
-        var fullHouse = GetFullHouse(cards);
-        if (!fullHouse.IsEmpty)
-            return fullHouse;
-
-        var flush = GetFlush(cards);
-        if (!flush.IsEmpty)
-            return flush;
-
-        var straight = GetStraight(cards);
-        if (!straight.IsEmpty)
-            return straight;
-
-        var threeKind = GetThreeKind(cards);
-        if (!threeKind.IsEmpty)
-            return threeKind;
-
-        var twoPair = GetTwoPair(cards);
-        if (!twoPair.IsEmpty)
-            return twoPair;
-
-        var pair = GetPair(cards);
-        return !pair.IsEmpty ? pair : GetHighCard(cards);
+        Span<HandResult> possibleHands = stackalloc HandResult[10]
+        {
+            GetRoyalFlush(cards),
+            GetStraightFlush(cards),
+            GetFourKind(cards),
+            GetFullHouse(cards),
+            GetFlush(cards),
+            GetStraight(cards),
+            GetThreeKind(cards),
+            GetTwoPair(cards),
+            GetPair(cards),
+            GetHighCard(cards)
+        };
+        return HandResult.OneOf(possibleHands);
     }
     
-    public static HandResult GetRoyalFlush(CardCollection cards)
+    private static HandResult GetRoyalFlush(CardCollection cards)
     {
         var clubs = cards.GetClubs().Intersect(StraightAceHigh);
         var diamonds = cards.GetDiamonds().Intersect(StraightAceHigh);
@@ -70,7 +50,7 @@ public static class HandChecker
             HandResult.Empty;
     }
 
-    public static HandResult GetStraightFlush(CardCollection cards)
+    private static HandResult GetStraightFlush(CardCollection cards)
     {
         var clubs = GetStraightFlushForSuit(Suit.Clubs);
         var diamonds = GetStraightFlushForSuit(Suit.Diamonds);
@@ -113,7 +93,7 @@ public static class HandChecker
         }
     }
 
-    public static HandResult GetFourKind(CardCollection cards)
+    private static HandResult GetFourKind(CardCollection cards)
     {
         var fourKind = GetFaceMatch(cards, 4);
         if (fourKind.IsEmpty)
@@ -131,7 +111,7 @@ public static class HandChecker
         return new HandResult(HandRank.FourKind, hand);
     }
     
-    public static HandResult GetFullHouse(CardCollection cards)
+    private static HandResult GetFullHouse(CardCollection cards)
     {
         // First, find the highest three of a kind.
         var threeKind = GetFaceMatch(cards, 3);
@@ -152,7 +132,7 @@ public static class HandChecker
         return new HandResult(HandRank.FullHouse, hand);
     }
 
-    public static HandResult GetFlush(CardCollection cards)
+    private static HandResult GetFlush(CardCollection cards)
     {
         var clubs = cards.GetClubs();
         var diamonds = cards.GetDiamonds();
@@ -174,7 +154,7 @@ public static class HandChecker
         return new HandResult(HandRank.Flush, hand);
     }
 
-    public static HandResult GetStraight(CardCollection cards)
+    private static HandResult GetStraight(CardCollection cards)
     {
         // First, flatten the hand to remove any notion of suits
         var clubs = cards.GetClubs();
@@ -266,7 +246,7 @@ public static class HandChecker
         return new HandResult(HandRank.Straight, hand);
     }
     
-    public static HandResult GetThreeKind(CardCollection cards)
+    private static HandResult GetThreeKind(CardCollection cards)
     {
         var threeKind = GetFaceMatch(cards, 3);
         if (threeKind.IsEmpty)
@@ -284,7 +264,7 @@ public static class HandChecker
         return new HandResult(HandRank.ThreeKind, hand);
     }
 
-    public static HandResult GetTwoPair(CardCollection cards)
+    private static HandResult GetTwoPair(CardCollection cards)
     {
         // First, find the highest pair.
         var highestPair = GetFaceMatch(cards, 2);
@@ -307,7 +287,7 @@ public static class HandChecker
         return new HandResult(HandRank.TwoPair, hand);
     }
     
-    public static HandResult GetPair(CardCollection cards)
+    private static HandResult GetPair(CardCollection cards)
     {
         // First, find the highest pair.
         var highestPair = GetFaceMatch(cards, 2);
@@ -323,7 +303,7 @@ public static class HandChecker
         return new HandResult(HandRank.Pair, hand);
     }
     
-    public static HandResult GetHighCard(CardCollection cards)
+    private static HandResult GetHighCard(CardCollection cards)
     {
         var hand = new Hand();
         cards.CopyTo(hand, 5);

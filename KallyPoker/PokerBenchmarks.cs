@@ -5,10 +5,10 @@ namespace KallyPoker;
 [MemoryDiagnoser]
 public class PokerBenchmarks
 {
-    private readonly Card[] _cards;
-    private readonly Random _random;
+    private static readonly Card[] _cards;
+    private static readonly Random _random;
     
-    public PokerBenchmarks()
+    static PokerBenchmarks()
     {
         var cardCollection = CardCollection.FullDeck;
         _cards = cardCollection.ToArray();
@@ -29,11 +29,7 @@ public class PokerBenchmarks
         
         for (var i = 0; i < maxLoop; i++)
         {
-            players[0].ResetCards();
-            players[1].ResetCards();
-            players[2].ResetCards();
-            players[3].ResetCards();
-            players[4].ResetCards();
+            players.ResetCards();
             table.Reset();
     
             _random.Shuffle(_cards);
