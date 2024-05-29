@@ -7,7 +7,7 @@ public class CardCollectionTests
     [Theory]
     [InlineData("TC", "TC")]
     [InlineData("TC,AH", "AH,TC")]
-    [InlineData("TC,9C,AH", "AH,TC,9C")]
+    [InlineData("9C,AH,TC", "AH,TC,9C")]
     [InlineData("9C,AH", "AH,9C")]
     public void TestConstruction(string cards, string expected)
     {
@@ -21,7 +21,7 @@ public class CardCollectionTests
     {
         var cardCollection = new CardCollection(Suit.ClubsMask | Suit.DiamondsMask | Suit.HeartsMask | Suit.SpadesMask);
         Assert.Equal(
-            "AS,KS,QS,JS,TS,9S,8S,7S,6S,5S,4S,3S,2S,AH,KH,QH,JH,TH,9H,8H,7H,6H,5H,4H,3H,2H,AD,KD,QD,JD,TD,9D,8D,7D,6D,5D,4D,3D,2D,AC,KC,QC,JC,TC,9C,8C,7C,6C,5C,4C,3C,2C",
+            "AC,AD,AH,AS,KC,KD,KH,KS,QC,QD,QH,QS,JC,JD,JH,JS,TC,TD,TH,TS,9C,9D,9H,9S,8C,8D,8H,8S,7C,7D,7H,7S,6C,6D,6H,6S,5C,5D,5H,5S,4C,4D,4H,4S,3C,3D,3H,3S,2C,2D,2H,2S",
             cardCollection.ToString());
     }
 }

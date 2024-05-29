@@ -12,5 +12,5 @@ public enum HandRank
     ThreeKind = 7,
     TwoPair = 8,
     Pair = 9,
-    HighCard = 10
+    HighCard = 10,
 }

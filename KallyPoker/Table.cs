@@ -1,13 +1,17 @@
 ﻿namespace KallyPoker;
 
-public struct Table(CardCollection cards)
+public struct Table()
 {
-    public CardCollection Cards = cards;
+    public CardCollection Flop = CardCollection.Empty;
+    public Card Turn = Card.Empty;
+    public Card River = Card.Empty;
 
     public void Reset()
     {
-        Cards = new CardCollection(0);
+        Flop = CardCollection.Empty;
+        Turn = Card.Empty;
+        River = Card.Empty;
     }
-    
-    public void AddCard(Card card) => Cards.Add(card);
+
+    public CardCollection Cards => new CardCollection(Flop.Value | Turn.Value | River.Value);
 }

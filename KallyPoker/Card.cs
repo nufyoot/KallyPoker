@@ -4,6 +4,8 @@ public readonly struct Card
 {
     public readonly ulong Value;
 
+    public static readonly Card Empty = new(0);
+
     public Card(ulong value)
     {
         Value = value;
@@ -12,6 +14,11 @@ public readonly struct Card
     public Card(Suit suit, Face face)
     {
         Value = suit.Mask & face.Mask;
+    }
+
+    public static implicit operator Card((Suit suit, Face face) tuple)
+    {
+        return new Card(tuple.suit, tuple.face);
     }
 
     public static ErrorTuple<Card> Parse(ReadOnlySpan<char> value)
