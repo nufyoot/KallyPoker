@@ -3,12 +3,28 @@ using System.Runtime.CompilerServices;
 
 namespace KallyPoker;
 
-public struct CardCollection(ulong value)
+public struct CardCollection
 {
-    public ulong Value = value;
+    private ulong _value;
 
     public static readonly CardCollection FullDeck = new(Suit.ClubsMask | Suit.DiamondsMask | Suit.HeartsMask | Suit.SpadesMask);
     public static readonly CardCollection Empty = new(0);
+
+    public CardCollection(ulong value)
+    {
+        _value = value;
+    }
+
+    public CardCollection(ReadOnlySpan<Card> cards)
+    {
+        foreach (var card in cards)
+            _value |= card.Bits;
+    }
+
+    public ulong Bits => _value;
+
+    public static CardCollection Union(CardCollection first, CardCollection second) => new(first._value | second._value);
+    public static CardCollection Union(CardCollection first, CardCollection second, CardCollection third) => new(first._value | second._value | third._value);
 
     public static ErrorTuple<CardCollection> Parse(ReadOnlySpan<char> cards)
     {
@@ -23,7 +39,7 @@ public struct CardCollection(ulong value)
                 var card = Card.Parse(cards.Slice(start, 2));
                 if (card.HasError)
                     return card.Error;
-                value |= card.Result.Value;
+                value |= card.Result.Bits;
             }
             else
                 return new Error($"The card value '{cards.Slice(start, i - start)}' is not valid. Expected 2 characters.");
@@ -38,29 +54,28 @@ public struct CardCollection(ulong value)
             var card = Card.Parse(cards[start..]);
             if (card.HasError)
                 return card.Error;
-            value |= card.Result.Value;
+            value |= card.Result.Bits;
         }
 
         return new CardCollection(value);
     }
+    
+    public void Add(Card card) => _value |= card.Bits;
+    public CardCollection Filter(Suit suit) => new(_value & suit.Mask);
+    public CardCollection Filter(Face face) => new(_value & face.Mask);
+    public bool IsEmpty => _value == 0;
 
-    public bool IsEmpty => Value == 0;
-
-    public void Add(Card card) => Value |= card.Value;
-    public void Add(CardCollection cards) => Value |= cards.Value;
-    public void Remove(Card card) => Value &= ~card.Value;
-    public bool Contains(Card card) => (Value & card.Value) != 0;
-    public int Count => BitOperations.PopCount(Value);
-
-    public CardCollection Except(Hand hand) => new(Value & ~hand.CardCollection.Value);
-    public CardCollection Except(CardCollection cards) => new(Value & ~cards.Value);
-    public CardCollection Filter(Suit suit) => new(Value & suit.Mask);
-    public CardCollection Filter(Face face) => new(Value & face.Mask);
-    public CardCollection Intersect(CardCollection other) => new(Value & other.Value);
-    public CardCollection GetClubs() => Filter(Suit.Clubs);
-    public CardCollection GetDiamonds() => Filter(Suit.Diamonds);
-    public CardCollection GetHearts() => Filter(Suit.Hearts);
-    public CardCollection GetSpades() => Filter(Suit.Spades);
+    public CardCollection FacesOnly() =>
+        new(
+            ((_value & Suit.ClubsMask) >> Suit.ClubsBitShift) |
+            ((_value & Suit.DiamondsMask) >> Suit.DiamondsBitShift) |
+            ((_value & Suit.HeartsMask) >> Suit.HeartsBitShift) |
+            ((_value & Suit.SpadesMask) >> Suit.SpadesBitShift));
+    
+    public int Count => BitOperations.PopCount(_value);
+    public CardCollection Except(CardCollection cards) => new(_value & ~cards._value);
+    
+    public CardCollection Intersect(CardCollection other) => new(_value & other._value);
 
     public Card GetTopCard()
     {
@@ -84,10 +99,10 @@ public struct CardCollection(ulong value)
         var resultIndex = 0;
         for (var cardMask = 1UL << 12; cardMask != 0; cardMask >>= 1)
         {
-            var clubFaceValue = ((Value >> Suit.ClubsBitShift) & cardMask) << Suit.ClubsBitShift;
-            var diamondFaceValue = ((Value >> Suit.DiamondsBitShift) & cardMask) << Suit.DiamondsBitShift;
-            var heartFaceValue = ((Value >> Suit.HeartsBitShift) & cardMask) << Suit.HeartsBitShift;
-            var spadeFaceValue = ((Value >> Suit.SpadesBitShift) & cardMask) << Suit.SpadesBitShift;
+            var clubFaceValue = ((_value >> Suit.ClubsBitShift) & cardMask) << Suit.ClubsBitShift;
+            var diamondFaceValue = ((_value >> Suit.DiamondsBitShift) & cardMask) << Suit.DiamondsBitShift;
+            var heartFaceValue = ((_value >> Suit.HeartsBitShift) & cardMask) << Suit.HeartsBitShift;
+            var spadeFaceValue = ((_value >> Suit.SpadesBitShift) & cardMask) << Suit.SpadesBitShift;
             
             if (clubFaceValue != 0)
                 cards[resultIndex++] = new Card(clubFaceValue);

@@ -37,10 +37,10 @@ public static class HandChecker
     
     private static HandResult GetRoyalFlush(CardCollection cards)
     {
-        var clubs = cards.GetClubs().Intersect(StraightAceHigh);
-        var diamonds = cards.GetDiamonds().Intersect(StraightAceHigh);
-        var hearts = cards.GetHearts().Intersect(StraightAceHigh);
-        var spades = cards.GetSpades().Intersect(StraightAceHigh);
+        var clubs = cards.Filter(Suit.Clubs).Intersect(StraightAceHigh);
+        var diamonds = cards.Filter(Suit.Diamonds).Intersect(StraightAceHigh);
+        var hearts = cards.Filter(Suit.Hearts).Intersect(StraightAceHigh);
+        var spades = cards.Filter(Suit.Spades).Intersect(StraightAceHigh);
 
         return
             clubs.Count == 5 ? new HandResult(HandRank.RoyalFlush, ConvertToHand(clubs)) :
@@ -88,7 +88,12 @@ public static class HandChecker
                 eightHigh.Count == 5 ? new HandResult(HandRank.StraightFlush, ConvertToHand(eightHigh)) :
                 sevenHigh.Count == 5 ? new HandResult(HandRank.StraightFlush, ConvertToHand(sevenHigh)) :
                 sixHigh.Count == 5 ? new HandResult(HandRank.StraightFlush, ConvertToHand(sixHigh)) :
-                fiveHigh.Count == 5 ? new HandResult(HandRank.StraightFlush, new Hand((suit, Face.Fives), (suit, Face.Fours), (suit, Face.Threes), (suit, Face.Twos), (suit, Face.Aces))) :
+                fiveHigh.Count == 5 ? new HandResult(HandRank.StraightFlush, new Hand(
+                    new Card(suit, Face.Fives),
+                    new Card(suit, Face.Fours),
+                    new Card(suit, Face.Threes),
+                    new Card(suit, Face.Twos),
+                    new Card(suit, Face.Aces))) :
                 HandResult.Empty;
         }
     }
@@ -134,10 +139,10 @@ public static class HandChecker
 
     private static HandResult GetFlush(CardCollection cards)
     {
-        var clubs = cards.GetClubs();
-        var diamonds = cards.GetDiamonds();
-        var hearts = cards.GetHearts();
-        var spades = cards.GetSpades();
+        var clubs = cards.Filter(Suit.Clubs);
+        var diamonds = cards.Filter(Suit.Diamonds);
+        var hearts = cards.Filter(Suit.Hearts);
+        var spades = cards.Filter(Suit.Spades);
 
         var hand = new Hand();
         if (clubs.Count >= 5)
@@ -156,18 +161,7 @@ public static class HandChecker
 
     private static HandResult GetStraight(CardCollection cards)
     {
-        // First, flatten the hand to remove any notion of suits
-        var clubs = cards.GetClubs();
-        var diamonds = cards.GetDiamonds();
-        var hearts = cards.GetHearts();
-        var spades = cards.GetSpades();
-
-        var flattenedCards = new CardCollection(
-            (clubs.Value >> Suit.ClubsBitShift) |
-            (diamonds.Value >> Suit.DiamondsBitShift) |
-            (hearts.Value >> Suit.HeartsBitShift) |
-            (spades.Value >> Suit.SpadesBitShift)
-        );
+        var flattenedCards = cards.FacesOnly();
 
         Hand hand;
         if (flattenedCards.Intersect(StraightAceHigh).Count == 5)

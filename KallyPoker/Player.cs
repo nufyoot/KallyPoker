@@ -1,19 +1,15 @@
-﻿namespace KallyPoker;
+﻿using System.Runtime.CompilerServices;
 
-public struct Player(CardCollection cards)
+namespace KallyPoker;
+
+public struct Player()
 {
-    public CardCollection Cards = cards;
+    public CardCollection Cards = CardCollection.Empty;
     public uint Money = 0;
-
-    public void ResetMoney(uint money)
-    {
-        Money = money;
-    }
+    public int Id = 0;
 
     public void ResetCards()
     {
         Cards = CardCollection.Empty;
     }
-    
-    public void AddCard(Card card) => Cards.Add(card);
 }

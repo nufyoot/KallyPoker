@@ -17,8 +17,6 @@ public struct Hand
         this[4] = card5;
     }
 
-    public CardCollection CardCollection => new(this[0].Value | this[1].Value | this[2].Value | this[3].Value | this[4].Value);
-
     public override string ToString()
     {
         var result = new StringBuilder(14);

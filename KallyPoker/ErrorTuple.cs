@@ -6,14 +6,14 @@ public readonly ref struct ErrorTuple<T>
     public readonly T? Result;
     public readonly bool HasError;
 
-    public ErrorTuple(Error error)
+    private ErrorTuple(Error error)
     {
         Result = default;
         Error = error;
         HasError = true;
     }
 
-    public ErrorTuple(T result)
+    private ErrorTuple(T result)
     {
         Result = result;
         Error = default;

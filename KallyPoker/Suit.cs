@@ -1,8 +1,9 @@
 ﻿namespace KallyPoker;
 
-public readonly struct Suit(ulong mask)
+public readonly struct Suit(ulong mask, int bitShift)
 {
     public readonly ulong Mask = mask;
+    public readonly int BitShift = bitShift;
 
     public const int ClubsBitShift = 48;
     public const int DiamondsBitShift = 32;
@@ -14,8 +15,8 @@ public readonly struct Suit(ulong mask)
     public const ulong HeartsMask = 0b0001111111111111UL << HeartsBitShift;
     public const ulong SpadesMask = 0b0001111111111111UL << SpadesBitShift;
 
-    public static readonly Suit Clubs = new(ClubsMask);
-    public static readonly Suit Diamonds = new(DiamondsMask);
-    public static readonly Suit Hearts = new(HeartsMask);
-    public static readonly Suit Spades = new(SpadesMask);
+    public static readonly Suit Clubs = new(ClubsMask, ClubsBitShift);
+    public static readonly Suit Diamonds = new(DiamondsMask, DiamondsBitShift);
+    public static readonly Suit Hearts = new(HeartsMask, HeartsBitShift);
+    public static readonly Suit Spades = new(SpadesMask, SpadesBitShift);
 }

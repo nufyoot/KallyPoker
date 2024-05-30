@@ -3,61 +3,82 @@
 public class CardTests
 {
     [Theory]
-    [InlineData(Suit.ClubsMask, Face.TwosMask, "2C")]
-    [InlineData(Suit.ClubsMask, Face.ThreesMask, "3C")]
-    [InlineData(Suit.ClubsMask, Face.FoursMask, "4C")]
-    [InlineData(Suit.ClubsMask, Face.FivesMask, "5C")]
-    [InlineData(Suit.ClubsMask, Face.SixesMask, "6C")]
-    [InlineData(Suit.ClubsMask, Face.SevensMask, "7C")]
-    [InlineData(Suit.ClubsMask, Face.EightsMask, "8C")]
-    [InlineData(Suit.ClubsMask, Face.NinesMask, "9C")]
-    [InlineData(Suit.ClubsMask, Face.TensMask, "TC")]
-    [InlineData(Suit.ClubsMask, Face.JacksMask, "JC")]
-    [InlineData(Suit.ClubsMask, Face.QueensMask, "QC")]
-    [InlineData(Suit.ClubsMask, Face.KingsMask, "KC")]
-    [InlineData(Suit.ClubsMask, Face.AcesMask, "AC")]
-    [InlineData(Suit.DiamondsMask, Face.TwosMask, "2D")]
-    [InlineData(Suit.DiamondsMask, Face.ThreesMask, "3D")]
-    [InlineData(Suit.DiamondsMask, Face.FoursMask, "4D")]
-    [InlineData(Suit.DiamondsMask, Face.FivesMask, "5D")]
-    [InlineData(Suit.DiamondsMask, Face.SixesMask, "6D")]
-    [InlineData(Suit.DiamondsMask, Face.SevensMask, "7D")]
-    [InlineData(Suit.DiamondsMask, Face.EightsMask, "8D")]
-    [InlineData(Suit.DiamondsMask, Face.NinesMask, "9D")]
-    [InlineData(Suit.DiamondsMask, Face.TensMask, "TD")]
-    [InlineData(Suit.DiamondsMask, Face.JacksMask, "JD")]
-    [InlineData(Suit.DiamondsMask, Face.QueensMask, "QD")]
-    [InlineData(Suit.DiamondsMask, Face.KingsMask, "KD")]
-    [InlineData(Suit.DiamondsMask, Face.AcesMask, "AD")]
-    [InlineData(Suit.HeartsMask, Face.TwosMask, "2H")]
-    [InlineData(Suit.HeartsMask, Face.ThreesMask, "3H")]
-    [InlineData(Suit.HeartsMask, Face.FoursMask, "4H")]
-    [InlineData(Suit.HeartsMask, Face.FivesMask, "5H")]
-    [InlineData(Suit.HeartsMask, Face.SixesMask, "6H")]
-    [InlineData(Suit.HeartsMask, Face.SevensMask, "7H")]
-    [InlineData(Suit.HeartsMask, Face.EightsMask, "8H")]
-    [InlineData(Suit.HeartsMask, Face.NinesMask, "9H")]
-    [InlineData(Suit.HeartsMask, Face.TensMask, "TH")]
-    [InlineData(Suit.HeartsMask, Face.JacksMask, "JH")]
-    [InlineData(Suit.HeartsMask, Face.QueensMask, "QH")]
-    [InlineData(Suit.HeartsMask, Face.KingsMask, "KH")]
-    [InlineData(Suit.HeartsMask, Face.AcesMask, "AH")]
-    [InlineData(Suit.SpadesMask, Face.TwosMask, "2S")]
-    [InlineData(Suit.SpadesMask, Face.ThreesMask, "3S")]
-    [InlineData(Suit.SpadesMask, Face.FoursMask, "4S")]
-    [InlineData(Suit.SpadesMask, Face.FivesMask, "5S")]
-    [InlineData(Suit.SpadesMask, Face.SixesMask, "6S")]
-    [InlineData(Suit.SpadesMask, Face.SevensMask, "7S")]
-    [InlineData(Suit.SpadesMask, Face.EightsMask, "8S")]
-    [InlineData(Suit.SpadesMask, Face.NinesMask, "9S")]
-    [InlineData(Suit.SpadesMask, Face.TensMask, "TS")]
-    [InlineData(Suit.SpadesMask, Face.JacksMask, "JS")]
-    [InlineData(Suit.SpadesMask, Face.QueensMask, "QS")]
-    [InlineData(Suit.SpadesMask, Face.KingsMask, "KS")]
-    [InlineData(Suit.SpadesMask, Face.AcesMask, "AS")]
-    public void TestStrings(ulong suitMask, ulong faceMask, string expected)
+    [InlineData("clubs", Face.TwosMask, "2C")]
+    [InlineData("clubs", Face.ThreesMask, "3C")]
+    [InlineData("clubs", Face.FoursMask, "4C")]
+    [InlineData("clubs", Face.FivesMask, "5C")]
+    [InlineData("clubs", Face.SixesMask, "6C")]
+    [InlineData("clubs", Face.SevensMask, "7C")]
+    [InlineData("clubs", Face.EightsMask, "8C")]
+    [InlineData("clubs", Face.NinesMask, "9C")]
+    [InlineData("clubs", Face.TensMask, "TC")]
+    [InlineData("clubs", Face.JacksMask, "JC")]
+    [InlineData("clubs", Face.QueensMask, "QC")]
+    [InlineData("clubs", Face.KingsMask, "KC")]
+    [InlineData("clubs", Face.AcesMask, "AC")]
+    [InlineData("diamonds", Face.TwosMask, "2D")]
+    [InlineData("diamonds", Face.ThreesMask, "3D")]
+    [InlineData("diamonds", Face.FoursMask, "4D")]
+    [InlineData("diamonds", Face.FivesMask, "5D")]
+    [InlineData("diamonds", Face.SixesMask, "6D")]
+    [InlineData("diamonds", Face.SevensMask, "7D")]
+    [InlineData("diamonds", Face.EightsMask, "8D")]
+    [InlineData("diamonds", Face.NinesMask, "9D")]
+    [InlineData("diamonds", Face.TensMask, "TD")]
+    [InlineData("diamonds", Face.JacksMask, "JD")]
+    [InlineData("diamonds", Face.QueensMask, "QD")]
+    [InlineData("diamonds", Face.KingsMask, "KD")]
+    [InlineData("diamonds", Face.AcesMask, "AD")]
+    [InlineData("hearts", Face.TwosMask, "2H")]
+    [InlineData("hearts", Face.ThreesMask, "3H")]
+    [InlineData("hearts", Face.FoursMask, "4H")]
+    [InlineData("hearts", Face.FivesMask, "5H")]
+    [InlineData("hearts", Face.SixesMask, "6H")]
+    [InlineData("hearts", Face.SevensMask, "7H")]
+    [InlineData("hearts", Face.EightsMask, "8H")]
+    [InlineData("hearts", Face.NinesMask, "9H")]
+    [InlineData("hearts", Face.TensMask, "TH")]
+    [InlineData("hearts", Face.JacksMask, "JH")]
+    [InlineData("hearts", Face.QueensMask, "QH")]
+    [InlineData("hearts", Face.KingsMask, "KH")]
+    [InlineData("hearts", Face.AcesMask, "AH")]
+    [InlineData("spades", Face.TwosMask, "2S")]
+    [InlineData("spades", Face.ThreesMask, "3S")]
+    [InlineData("spades", Face.FoursMask, "4S")]
+    [InlineData("spades", Face.FivesMask, "5S")]
+    [InlineData("spades", Face.SixesMask, "6S")]
+    [InlineData("spades", Face.SevensMask, "7S")]
+    [InlineData("spades", Face.EightsMask, "8S")]
+    [InlineData("spades", Face.NinesMask, "9S")]
+    [InlineData("spades", Face.TensMask, "TS")]
+    [InlineData("spades", Face.JacksMask, "JS")]
+    [InlineData("spades", Face.QueensMask, "QS")]
+    [InlineData("spades", Face.KingsMask, "KS")]
+    [InlineData("spades", Face.AcesMask, "AS")]
+    public void TestStrings(string suitName, ulong faceMask, string expected)
     {
-        var actual = new Card(new Suit(suitMask), new Face(faceMask)).ToString();
+        var suit = suitName switch
+        {
+            "clubs" => Suit.Clubs,
+            "diamonds" => Suit.Diamonds,
+            "hearts" => Suit.Hearts,
+            "spades" => Suit.Spades,
+            _ => throw new NotImplementedException()
+        };
+        var actual = new Card(suit, new Face(faceMask)).ToString();
         Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [InlineData("AC", "KC", 1)]
+    [InlineData("QC", "KC", -1)]
+    [InlineData("QC", "QS", 0)]
+    [InlineData("AC", "2S", 1)]
+    public void TestComparisons(string firstCardString, string secondCardString, int comparison)
+    {
+        var firstCard = Card.Parse(firstCardString).Result;
+        var secondCard = Card.Parse(secondCardString).Result;
+        
+        Assert.Equal(comparison, firstCard.CompareTo(secondCard));
     }
 }

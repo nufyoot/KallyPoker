@@ -18,55 +18,41 @@ public class PokerBenchmarks
     [Benchmark]
     public void RunTest()
     {
-        var players = new PlayerCollection();
         var table = new Table();
         
 #if DEBUG
-        const int maxLoop = 100;
+        const int maxLoop = 150;
 #else
         const int maxLoop = 1_000_000;
 #endif
         
+        // Reset money
+        for (var p = 0; p < 5; p++)
+        {
+            table.Players[p].Money = 10_000_000;
+            table.Players[p].Id = (p + 1);
+        }
+
         for (var i = 0; i < maxLoop; i++)
         {
-            players.ResetCards();
-            table.Reset();
-    
             _random.Shuffle(_cards);
-    
-            // Deal the first card.
-            players[0].AddCard(_cards[0]);
-            players[1].AddCard(_cards[1]);
-            players[2].AddCard(_cards[2]);
-            players[3].AddCard(_cards[3]);
-            players[4].AddCard(_cards[4]);
-    
-            // Deal the second card.
-            players[0].AddCard(_cards[5]);
-            players[1].AddCard(_cards[6]);
-            players[2].AddCard(_cards[7]);
-            players[3].AddCard(_cards[8]);
-            players[4].AddCard(_cards[9]);
-    
-            // Deal the flop
-            table.Flop = new CardCollection(_cards[11].Value | _cards[12].Value | _cards[13].Value);
-    
-            // Deal the turn
-            table.Turn = _cards[15];
-    
-            // Deal the river
-            table.River = _cards[17];
+            table.Reset();
+            table.DealCards(_cards);
 
 #if DEBUG
-            for (var p = 0; p < 5; p++)
+            Console.WriteLine($"Hand {i+1}");
+            Console.WriteLine($"{table.Flop,-11}{table.Turn,-5}{table.River,-5}");
+            
+            Console.WriteLine("          Money                   Hand      Pre-flop       flop           Turn           River          Best Hand");
+            
+            foreach(var player in table.Players)
             {
-                var playerCards = players[p].Cards;
-                playerCards.Add(table.Cards);
-                var preFlopBestHand = HandChecker.GetBestHand(players[p].Cards);
-                var flopBestHand = HandChecker.GetBestHand(new CardCollection(players[p].Cards.Value | table.Flop.Value));
-                var turnBestHand = HandChecker.GetBestHand(new CardCollection(players[p].Cards.Value | table.Flop.Value | table.Turn.Value));
-                var bestHand = HandChecker.GetBestHand(playerCards);
-                Console.WriteLine($"{table.Flop,-10}{table.Turn,-5}{table.River,-5}{table.Cards,-20}{players[p].Cards,-10}{playerCards,-25}{preFlopBestHand.Rank,-15}{flopBestHand.Rank,-15}{turnBestHand.Rank,-15}{bestHand.Rank,-15}{bestHand.Cards}");
+                var playerCards = CardCollection.Union(player.Cards, table.CardsAtRiver);
+                var preFlopBestHand = HandChecker.GetBestHand(player.Cards);
+                var flopBestHand = HandChecker.GetBestHand(CardCollection.Union(player.Cards, table.CardsAtFlop));
+                var turnBestHand = HandChecker.GetBestHand(CardCollection.Union(player.Cards, table.CardsAtTurn));
+                var riverBestHand = HandChecker.GetBestHand(playerCards);
+                Console.WriteLine($"Player {player.Id}: (${player.Money,18:N})   {player.Cards,-10}{preFlopBestHand.Rank,-15}{flopBestHand.Rank,-15}{turnBestHand.Rank,-15}{riverBestHand.Rank,-15}{riverBestHand.Cards}");
             }
             Console.WriteLine();
 #endif
