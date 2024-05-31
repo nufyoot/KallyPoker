@@ -24,4 +24,15 @@ public readonly ref struct ErrorTuple<T>
     public static implicit operator Error(ErrorTuple<T> errorTuple) => errorTuple.Error;
     public static implicit operator ErrorTuple<T>(T result) => new(result);
     public static implicit operator ErrorTuple<T>(Error error) => new(error);
+
+    public T ResultOrThrow
+    {
+        get
+        {
+            if (HasError)
+                throw new NullReferenceException($"An error was raised and not handled: {Error.Message}");
+
+            return Result!;
+        }
+    }
 }

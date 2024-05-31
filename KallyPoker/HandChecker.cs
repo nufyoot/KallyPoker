@@ -34,6 +34,42 @@ public static class HandChecker
         };
         return HandResult.OneOf(possibleHands);
     }
+
+    public static Winners GetWinningHands(Table table)
+    {
+        Span<HandResult> allHandResults = stackalloc HandResult[5];
+        var winners = new Winners();
+        
+        for (var i = 0; i < 5; i++)
+            allHandResults[i] = GetBestHand(CardCollection.Union(table.Players[i].Cards, table.CardsAtRiver));
+
+        winners.Players[0] = table.Players[0];
+        winners.Length = 1;
+        var winningHand = allHandResults[0];
+
+        for (var i = 1; i < 5; i++)
+        {
+            switch (allHandResults[i].CompareTo(winningHand))
+            {
+                case -1:
+                    // This hand isn't any better... skip it.
+                    break;
+                
+                case 1:
+                    // This is a better hand. Reset everything.
+                    winners.Players[0] = table.Players[i];
+                    winners.Length = 1;
+                    winningHand = allHandResults[i];
+                    break;
+                
+                case 0:
+                    winners.Players[winners.Length++] = table.Players[i];
+                    break;
+            }
+        }
+
+        return winners;
+    }
     
     private static HandResult GetRoyalFlush(CardCollection cards)
     {
