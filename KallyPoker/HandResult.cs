@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Runtime.CompilerServices;
-
-namespace KallyPoker;
+﻿namespace KallyPoker;
 
 public readonly struct HandResult(HandRank rank, Hand cards)
 {
@@ -12,9 +9,7 @@ public readonly struct HandResult(HandRank rank, Hand cards)
 
     public bool IsEmpty => Rank == HandRank.Unknown;
 
-    public ulong Score => (((ulong)Rank) << 16) | new CardCollection(Cards).FacesOnly().Bits;
-
-    public static HandResult OneOf(Span<HandResult> results)
+    public static HandResult OneOf(ReadOnlySpan<HandResult> results)
     {
         foreach (var result in results)
             if (!result.IsEmpty)

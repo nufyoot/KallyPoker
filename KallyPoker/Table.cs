@@ -19,20 +19,20 @@ public struct Table(Random random)
     public CardCollection CardsAtTurn => CardCollection.Union(Flop, Turn);
     public CardCollection CardsAtRiver => CardCollection.Union(Flop, Turn, River);
 
-    public void DealCards(Span<Card> cards)
+    public void DealCards(ReadOnlySpan<Card> cards)
     {
         DealCardsToPlayers(cards);
         Flop = new CardCollection(cards[11..14]);
-        Turn = new CardCollection(cards[15].Bits);
-        River = new CardCollection(cards[17].Bits);
+        Turn = new CardCollection(cards[15]);
+        River = new CardCollection(cards[17]);
     }
 
-    private void DealCardsToPlayers(Span<Card> cards)
+    private void DealCardsToPlayers(ReadOnlySpan<Card> cards)
     {
-        Players[0].Cards = new CardCollection(cards[0].Bits | cards[5].Bits);
-        Players[1].Cards = new CardCollection(cards[1].Bits | cards[6].Bits);
-        Players[2].Cards = new CardCollection(cards[2].Bits | cards[7].Bits);
-        Players[3].Cards = new CardCollection(cards[3].Bits | cards[8].Bits);
-        Players[4].Cards = new CardCollection(cards[4].Bits | cards[9].Bits);
+        Players[0].Cards = cards[0] + cards[5];
+        Players[1].Cards = cards[1] + cards[6];
+        Players[2].Cards = cards[2] + cards[7];
+        Players[3].Cards = cards[3] + cards[8];
+        Players[4].Cards = cards[4] + cards[9];
     }
 }

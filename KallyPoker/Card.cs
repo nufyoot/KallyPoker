@@ -2,24 +2,30 @@
 
 public readonly struct Card(ulong bits)
 {
-    public readonly ulong Bits = bits;
+    private readonly ulong _bits = bits;
 
     public Card(Suit suit, Face face) : this(suit.Mask & face.Mask)
     {
     }
 
+    public static ulong operator |(ulong inputValue, Card card) => inputValue | card._bits;
+
+    public static CardCollection operator +(Card card1, Card card2) => new(card1._bits | card2._bits);
+
+    public static implicit operator ulong(Card card) => card._bits;
+
     public int CompareTo(Card other)
     {
         var thisFace =
-            ((Bits & Suit.ClubsMask) >> Suit.ClubsBitShift) |
-            ((Bits & Suit.DiamondsMask) >> Suit.DiamondsBitShift) |
-            ((Bits & Suit.HeartsMask) >> Suit.HeartsBitShift) |
-            ((Bits & Suit.SpadesMask) >> Suit.SpadesBitShift);
+            ((_bits & Suit.ClubsMask) >> Suit.ClubsBitShift) |
+            ((_bits & Suit.DiamondsMask) >> Suit.DiamondsBitShift) |
+            ((_bits & Suit.HeartsMask) >> Suit.HeartsBitShift) |
+            ((_bits & Suit.SpadesMask) >> Suit.SpadesBitShift);
         var otherFace = 
-            ((other.Bits & Suit.ClubsMask) >> Suit.ClubsBitShift) |
-            ((other.Bits & Suit.DiamondsMask) >> Suit.DiamondsBitShift) |
-            ((other.Bits & Suit.HeartsMask) >> Suit.HeartsBitShift) |
-            ((other.Bits & Suit.SpadesMask) >> Suit.SpadesBitShift);
+            ((other._bits & Suit.ClubsMask) >> Suit.ClubsBitShift) |
+            ((other._bits & Suit.DiamondsMask) >> Suit.DiamondsBitShift) |
+            ((other._bits & Suit.HeartsMask) >> Suit.HeartsBitShift) |
+            ((other._bits & Suit.SpadesMask) >> Suit.SpadesBitShift);
 
         return thisFace.CompareTo(otherFace);
     }
@@ -69,40 +75,40 @@ public readonly struct Card(ulong bits)
     {
         var str = new char[2];
 
-        if ((Face.Twos.Mask & Bits) != 0)
+        if ((Face.Twos.Mask & _bits) != 0)
             str[0] = '2';
-        else if ((Face.Threes.Mask & Bits) != 0)
+        else if ((Face.Threes.Mask & _bits) != 0)
             str[0] = '3';
-        else if ((Face.Fours.Mask & Bits) != 0)
+        else if ((Face.Fours.Mask & _bits) != 0)
             str[0] = '4';
-        else if ((Face.Fives.Mask & Bits) != 0)
+        else if ((Face.Fives.Mask & _bits) != 0)
             str[0] = '5';
-        else if ((Face.Sixes.Mask & Bits) != 0)
+        else if ((Face.Sixes.Mask & _bits) != 0)
             str[0] = '6';
-        else if ((Face.Sevens.Mask & Bits) != 0)
+        else if ((Face.Sevens.Mask & _bits) != 0)
             str[0] = '7';
-        else if ((Face.Eights.Mask & Bits) != 0)
+        else if ((Face.Eights.Mask & _bits) != 0)
             str[0] = '8';
-        else if ((Face.Nines.Mask & Bits) != 0)
+        else if ((Face.Nines.Mask & _bits) != 0)
             str[0] = '9';
-        else if ((Face.Tens.Mask & Bits) != 0)
+        else if ((Face.Tens.Mask & _bits) != 0)
             str[0] = 'T';
-        else if ((Face.Jacks.Mask & Bits) != 0)
+        else if ((Face.Jacks.Mask & _bits) != 0)
             str[0] = 'J';
-        else if ((Face.Queens.Mask & Bits) != 0)
+        else if ((Face.Queens.Mask & _bits) != 0)
             str[0] = 'Q';
-        else if ((Face.Kings.Mask & Bits) != 0)
+        else if ((Face.Kings.Mask & _bits) != 0)
             str[0] = 'K';
-        else if ((Face.Aces.Mask & Bits) != 0)
+        else if ((Face.Aces.Mask & _bits) != 0)
             str[0] = 'A';
 
-        if ((Suit.Clubs.Mask & Bits) != 0)
+        if ((Suit.Clubs.Mask & _bits) != 0)
             str[1] = 'C';
-        else if ((Suit.Diamonds.Mask & Bits) != 0)
+        else if ((Suit.Diamonds.Mask & _bits) != 0)
             str[1] = 'D';
-        else if ((Suit.Hearts.Mask & Bits) != 0)
+        else if ((Suit.Hearts.Mask & _bits) != 0)
             str[1] = 'H';
-        else if ((Suit.Spades.Mask & Bits) != 0)
+        else if ((Suit.Spades.Mask & _bits) != 0)
             str[1] = 'S';
         
         return new string(str);

@@ -3,8 +3,8 @@ namespace KallyPoker;
 public readonly ref struct ErrorTuple<T>
 {
     public readonly Error Error;
-    public readonly T? Result;
     public readonly bool HasError;
+    public readonly T? Result;
 
     private ErrorTuple(Error error)
     {

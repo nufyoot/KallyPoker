@@ -6,20 +6,14 @@ namespace KallyPoker;
 [MemoryDiagnoser]
 public class PokerBenchmarks
 {
-    private static readonly Card[] _cards;
-    private static readonly Random _random;
+    private readonly Card[] _cards;
+    private readonly Random _random;
     
-    static PokerBenchmarks()
+    public PokerBenchmarks()
     {
         var cardCollection = CardCollection.FullDeck;
         _cards = cardCollection.ToArray();
         _random = new Random(42);
-    }
-
-    private class Score
-    {
-        public int Wins { get; set; }
-        public int Losses { get; set; }
     }
 
     [Benchmark]
@@ -35,16 +29,9 @@ public class PokerBenchmarks
         
         // Reset money
         for (var p = 0; p < 5; p++)
-        {
-            table.Players[p].Money = 1_000_000_000;
-            table.Players[p].Id = (p + 1);
-        }
+            table.Players[p] = new Player(p + 1, 100, new Caller(), CardCollection.Empty);
         
         // Setup the player types
-        table.Players[0].PlayerType = new Caller();
-        table.Players[1].PlayerType = new Caller();
-        table.Players[2].PlayerType = new Caller();
-        table.Players[3].PlayerType = new Caller();
         table.Players[4].PlayerType = new PocketPairCaller();
 
         for (var i = 0; i < maxLoop; i++)

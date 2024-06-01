@@ -1,20 +1,13 @@
-﻿using System.Runtime.CompilerServices;
-using KallyPoker.PlayerTypes;
+﻿using KallyPoker.PlayerTypes;
 
 namespace KallyPoker;
 
-public struct Player()
+public class Player(int id, ulong money, PlayerType playerType, CardCollection cards)
 {
-    public CardCollection Cards = CardCollection.Empty;
-    public ulong Money = 0;
-    public int Id = 0;
-    public PlayerType? PlayerType;
-
-    public Player(int id, CardCollection cards) : this()
-    {
-        Id = id;
-        Cards = cards;
-    }
+    public CardCollection Cards { get; set; } = cards;
+    public ulong Money { get; set; } = money;
+    public int Id { get; }= id;
+    public PlayerType PlayerType { get; set; } = playerType;
 
     public void ResetCards()
     {

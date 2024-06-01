@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Running;
 using KallyPoker;
 
 #if DEBUG

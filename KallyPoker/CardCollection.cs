@@ -1,5 +1,4 @@
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace KallyPoker;
 
@@ -15,13 +14,18 @@ public struct CardCollection
         _value = value;
     }
 
+    public CardCollection(Card card)
+    {
+        _value = card;
+    }
+
     public CardCollection(ReadOnlySpan<Card> cards)
     {
         foreach (var card in cards)
-            _value |= card.Bits;
+            _value |= card;
     }
 
-    public ulong Bits => _value;
+    public static ulong operator |(ulong inputValue, CardCollection cards) => inputValue | cards._value;
 
     public static CardCollection Union(CardCollection first, CardCollection second) => new(first._value | second._value);
     public static CardCollection Union(CardCollection first, CardCollection second, CardCollection third) => new(first._value | second._value | third._value);
@@ -39,7 +43,7 @@ public struct CardCollection
                 var card = Card.Parse(cards.Slice(start, 2));
                 if (card.HasError)
                     return card.Error;
-                value |= card.Result.Bits;
+                value |= card.Result;
             }
             else
                 return new Error($"The card value '{cards.Slice(start, i - start)}' is not valid. Expected 2 characters.");
@@ -54,13 +58,13 @@ public struct CardCollection
             var card = Card.Parse(cards[start..]);
             if (card.HasError)
                 return card.Error;
-            value |= card.Result.Bits;
+            value |= card.Result;
         }
 
         return new CardCollection(value);
     }
     
-    public void Add(Card card) => _value |= card.Bits;
+    public void Add(Card card) => _value |= card;
     public CardCollection Filter(Suit suit) => new(_value & suit.Mask);
     public CardCollection Filter(Face face) => new(_value & face.Mask);
     public bool IsEmpty => _value == 0;
@@ -73,6 +77,7 @@ public struct CardCollection
             ((_value & Suit.SpadesMask) >> Suit.SpadesBitShift));
     
     public int Count => BitOperations.PopCount(_value);
+    
     public CardCollection Except(CardCollection cards) => new(_value & ~cards._value);
     
     public CardCollection Intersect(CardCollection other) => new(_value & other._value);

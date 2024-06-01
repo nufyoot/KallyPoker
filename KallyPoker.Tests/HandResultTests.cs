@@ -1,4 +1,6 @@
-﻿namespace KallyPoker.Tests;
+﻿using KallyPoker.PlayerTypes;
+
+namespace KallyPoker.Tests;
 
 public class HandResultTests
 {
@@ -39,7 +41,7 @@ public class HandResultTests
         };
 
         for (var i = 0; i < 5; i++)
-            table.Players[i] = new Player(i + 1, CardCollection.Parse(handStrings[i]));
+            table.Players[i] = new Player(i + 1, 100, new Caller(), CardCollection.Parse(handStrings[i]));
 
         var expectedWinningPlayers = winningPlayerString.Split(',').Select(int.Parse).ToArray();
         var winningHands = HandChecker.GetWinningHands(table);
