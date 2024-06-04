@@ -34,8 +34,50 @@ public struct PlayerBetCollection
         this[3].Bet.GetValueOrDefault() +
         this[4].Bet.GetValueOrDefault();
 
-    private ref struct PendingPlayerBetEnumerator
+    private ref struct PendingPlayerBetEnumerator(PlayerBetCollection playerBets)
     {
+        private readonly PlayerBetCollection _playerBets = playerBets;
+        private int _index;
         
+        
+        
+        public bool MoveNext()
+        {
+            int newIndex;
+            
+            for (newIndex = (_index + 1) % 5; newIndex != _index; newIndex = (newIndex + 1) % 5)
+            {
+                var playerBet = _playerBets[newIndex];
+                
+                // Skip anyone who has gone all-in
+                if (playerBet.IsAllIn)
+                    continue;
+                
+                // Skip anyone who has no more money.
+                if (playerBet.Player.Money == 0)
+                    continue;
+
+                // If we haven't played yet, allow it to happen now.
+                if (playerBet.State == PlayerBet.PlayerBetState.NotPlayed)
+                    break;
+                
+                // Ok, at this point we've played at least once, we haven't gone all-in, and we have money left.
+                // Determine if we're already matching the max bet. If we are already matching the max bet, 
+                // continue to the next player.
+                if (playerBet.Bet.GetValueOrDefault() == _playerBets.MaxBet)
+                    continue;
+                
+                // At this point, the player hasn't folded, they didn't go all-in, they have money, and their bet
+                // doesn't match the max bet put forth. This seems like a good place to stop.
+                break;
+            }
+
+            // If we made it back around to the current index, there are no more players to look at.
+            if (newIndex == _index)
+                return false;
+            
+            _index = newIndex;
+            return true;
+        }
     }
 }

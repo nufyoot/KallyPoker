@@ -22,7 +22,7 @@ public class PokerBenchmarks
         var table = new Table();
         
 #if DEBUG
-        const int maxLoop = 150;
+        const int maxLoop = 1;
 #else
         const int maxLoop = 1_000_000;
 #endif
