@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace KallyPoker;
 
@@ -16,17 +17,6 @@ public struct PlayerBetCollection
         this[4] = new PlayerBet(players[4]);
     }
 
-    public ulong MaxBet
-    {
-        get
-        {
-            var max = 0UL;
-            foreach (var playerBet in this)
-                max = Math.Max(max, playerBet.Bet.GetValueOrDefault());
-            return max;
-        }
-    }
-
     public ulong TotalBet =>
         this[0].Bet.GetValueOrDefault() +
         this[1].Bet.GetValueOrDefault() +
@@ -34,13 +24,15 @@ public struct PlayerBetCollection
         this[3].Bet.GetValueOrDefault() +
         this[4].Bet.GetValueOrDefault();
 
-    private ref struct PendingPlayerBetEnumerator(PlayerBetCollection playerBets)
+    public PendingPlayerBetEnumerator GetEnumerator() => new(this);
+
+    public ref struct PendingPlayerBetEnumerator(PlayerBetCollection playerBets)
     {
         private readonly PlayerBetCollection _playerBets = playerBets;
         private int _index;
-        
-        
-        
+
+        public readonly PlayerBet Current => _playerBets[_index];
+
         public bool MoveNext()
         {
             int newIndex;
@@ -64,7 +56,7 @@ public struct PlayerBetCollection
                 // Ok, at this point we've played at least once, we haven't gone all-in, and we have money left.
                 // Determine if we're already matching the max bet. If we are already matching the max bet, 
                 // continue to the next player.
-                if (playerBet.Bet.GetValueOrDefault() == _playerBets.MaxBet)
+                if (playerBet.Bet.GetValueOrDefault() == MaxBet)
                     continue;
                 
                 // At this point, the player hasn't folded, they didn't go all-in, they have money, and their bet
@@ -78,6 +70,17 @@ public struct PlayerBetCollection
             
             _index = newIndex;
             return true;
+        }
+        
+        private ulong MaxBet
+        {
+            get
+            {
+                var max = 0UL;
+                foreach (var playerBet in _playerBets)
+                    max = Math.Max(max, playerBet.Bet.GetValueOrDefault());
+                return max;
+            }
         }
     }
 }

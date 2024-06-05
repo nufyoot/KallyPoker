@@ -6,7 +6,7 @@ public class Player(int id, ulong money, PlayerType playerType, CardCollection c
 {
     public CardCollection Cards { get; set; } = cards;
     public ulong Money { get; set; } = money;
-    public int Id { get; }= id;
+    public int Id { get; } = id;
     public PlayerType PlayerType { get; set; } = playerType;
 
     public void ResetCards()
