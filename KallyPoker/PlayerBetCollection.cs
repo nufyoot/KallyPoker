@@ -1,48 +1,52 @@
 ﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace KallyPoker;
 
-[InlineArray(5)]
+[InlineArray(PokerConstants.PlayerCount)]
 public struct PlayerBetCollection
 {
     private PlayerBet _element0;
 
     public PlayerBetCollection(PlayerCollection players)
     {
-        this[0] = new PlayerBet(players[0]);
-        this[1] = new PlayerBet(players[1]);
-        this[2] = new PlayerBet(players[2]);
-        this[3] = new PlayerBet(players[3]);
-        this[4] = new PlayerBet(players[4]);
+        for (var i = 0; i < PokerConstants.PlayerCount; i++)
+            this[i] = new PlayerBet(players[i]);
     }
 
-    public ulong TotalBet =>
-        this[0].Bet.GetValueOrDefault() +
-        this[1].Bet.GetValueOrDefault() +
-        this[2].Bet.GetValueOrDefault() +
-        this[3].Bet.GetValueOrDefault() +
-        this[4].Bet.GetValueOrDefault();
-
-    public PendingPlayerBetEnumerator GetEnumerator() => new(this);
-
-    public ref struct PendingPlayerBetEnumerator(PlayerBetCollection playerBets)
+    public ulong TotalBet
     {
-        private readonly PlayerBetCollection _playerBets = playerBets;
-        private int _index;
+        get
+        {
+            var total = 0UL;
+            foreach (var playerBet in this)
+                total += playerBet.Bet.GetValueOrDefault();
+            return total;
+        }
+    }
 
-        public readonly PlayerBet Current => _playerBets[_index];
+    public ref struct PendingPlayerBetEnumerator(ref PlayerBetCollection playerBets, int startingSeat)
+    {
+        private readonly ref PlayerBetCollection _playerBets = ref playerBets;
+        private int _index = startingSeat - 1;
+
+        public PendingPlayerBetEnumerator GetEnumerator() => this;
+
+        public ref PlayerBet Current => ref _playerBets[_index];
 
         public bool MoveNext()
         {
             int newIndex;
             
-            for (newIndex = (_index + 1) % 5; newIndex != _index; newIndex = (newIndex + 1) % 5)
+            for (newIndex = (_index + 1) % PokerConstants.PlayerCount; newIndex != _index; newIndex = (newIndex + 1) % PokerConstants.PlayerCount)
             {
                 var playerBet = _playerBets[newIndex];
                 
                 // Skip anyone who has gone all-in
                 if (playerBet.IsAllIn)
+                    continue;
+                
+                // Skip anyone who has folded
+                if (playerBet.State == PlayerBet.PlayerBetState.Folded)
                     continue;
                 
                 // Skip anyone who has no more money.
@@ -83,4 +87,10 @@ public struct PlayerBetCollection
             }
         }
     }
+}
+
+public static class PlayerBetCollectionExtensions
+{
+    public static PlayerBetCollection.PendingPlayerBetEnumerator EnumeratePendingBets(ref this PlayerBetCollection playerBets, int startingSeat) => 
+        new(ref playerBets, startingSeat);
 }

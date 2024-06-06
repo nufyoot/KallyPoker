@@ -1,6 +1,6 @@
 ﻿namespace KallyPoker;
 
-public class PlayerBet(Player player, ulong? bet = null)
+public struct PlayerBet(Player player, ulong? bet = null)
 {
     public enum PlayerBetState
     {

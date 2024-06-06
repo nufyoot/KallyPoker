@@ -2,9 +2,9 @@ using System.Numerics;
 
 namespace KallyPoker;
 
-public struct CardCollection
+public readonly struct CardCollection
 {
-    private ulong _value;
+    private readonly ulong _value;
 
     public static readonly CardCollection FullDeck = new(Suit.ClubsMask | Suit.DiamondsMask | Suit.HeartsMask | Suit.SpadesMask);
     public static readonly CardCollection Empty = new(0);
@@ -25,37 +25,15 @@ public struct CardCollection
             _value |= card;
     }
 
-    public static ulong operator |(ulong inputValue, CardCollection cards) => inputValue | cards._value;
-
     public static CardCollection Union(CardCollection first, CardCollection second) => new(first._value | second._value);
     public static CardCollection Union(CardCollection first, CardCollection second, CardCollection third) => new(first._value | second._value | third._value);
 
     public static ErrorTuple<CardCollection> Parse(ReadOnlySpan<char> cards)
     {
-        var start = 0;
         var value = 0UL;
-        for (var i = 0; i < cards.Length; i++)
+        for (var i = 0; i < cards.Length; i += 3)
         {
-            if (cards[i] != ',') continue;
-
-            if (i - start == 2)
-            {
-                var card = Card.Parse(cards.Slice(start, 2));
-                if (card.HasError)
-                    return card.Error;
-                value |= card.Result;
-            }
-            else
-                return new Error($"The card value '{cards.Slice(start, i - start)}' is not valid. Expected 2 characters.");
-
-            start = i + 1;
-        }
-
-        if (start != cards.Length)
-        {
-            if (cards.Length - start != 2)
-                return new Error($"The card value '{cards[start..]}' is not valid. Expected 2 characters.");
-            var card = Card.Parse(cards[start..]);
+            var card = Card.Parse(cards.Slice(i, 2));
             if (card.HasError)
                 return card.Error;
             value |= card.Result;
@@ -64,7 +42,6 @@ public struct CardCollection
         return new CardCollection(value);
     }
     
-    public void Add(Card card) => _value |= card;
     public CardCollection Filter(Suit suit) => new(_value & suit.Mask);
     public CardCollection Filter(Face face) => new(_value & face.Mask);
     public bool IsEmpty => _value == 0;

@@ -22,16 +22,16 @@ public class PokerBenchmarks
         var table = new Table();
         
 #if DEBUG
-        const int maxLoop = 1;
+        const int maxLoop = 10;
 #else
         const int maxLoop = 1_000_000;
 #endif
         
         // Reset money
-        for (var p = 0; p < 5; p++)
+        for (var p = 0; p < PokerConstants.PlayerCount; p++)
             table.Players[p] = new Player(p + 1, 100, new Caller(), CardCollection.Empty);
         
-        // Setup the player types
+        // Set up the player types
         table.Players[4].PlayerType = new PocketPairCaller();
 
         for (var i = 0; i < maxLoop; i++)
@@ -39,6 +39,9 @@ public class PokerBenchmarks
             _random.Shuffle(_cards);
             table.Reset();
             table.DealCards(_cards);
+
+            var pot = new Pot(table.Players);
+            pot.RunPreFlopBetting();
 
 #if DEBUG
             Console.WriteLine($"Hand {i+1}");

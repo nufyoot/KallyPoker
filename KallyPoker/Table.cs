@@ -1,6 +1,6 @@
 ﻿namespace KallyPoker;
 
-public struct Table(Random random)
+public struct Table()
 {
     public CardCollection Flop = CardCollection.Empty;
     public CardCollection Turn = CardCollection.Empty;
@@ -22,17 +22,18 @@ public struct Table(Random random)
     public void DealCards(ReadOnlySpan<Card> cards)
     {
         DealCardsToPlayers(cards);
-        Flop = new CardCollection(cards[11..14]);
-        Turn = new CardCollection(cards[15]);
-        River = new CardCollection(cards[17]);
+
+        const int flopStart = (PokerConstants.PlayerCount * 2) + 1;
+        const int turnStart = flopStart + 4;
+        const int riverStart = turnStart + 2;
+        Flop = new CardCollection(cards.Slice(flopStart, 3));
+        Turn = new CardCollection(cards[turnStart]);
+        River = new CardCollection(cards[riverStart]);
     }
 
     private void DealCardsToPlayers(ReadOnlySpan<Card> cards)
     {
-        Players[0].Cards = cards[0] + cards[5];
-        Players[1].Cards = cards[1] + cards[6];
-        Players[2].Cards = cards[2] + cards[7];
-        Players[3].Cards = cards[3] + cards[8];
-        Players[4].Cards = cards[4] + cards[9];
+        for (var i = 0; i < PokerConstants.PlayerCount; i++)
+            Players[i].Cards = cards[i] + cards[PokerConstants.PlayerCount + i];
     }
 }

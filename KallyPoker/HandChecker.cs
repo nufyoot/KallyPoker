@@ -33,17 +33,17 @@ public static class HandChecker
 
     public static Winners GetWinningHands(Table table)
     {
-        Span<HandResult> allHandResults = stackalloc HandResult[5];
+        Span<HandResult> allHandResults = stackalloc HandResult[PokerConstants.PlayerCount];
         var winners = new Winners();
         
-        for (var i = 0; i < 5; i++)
+        for (var i = 0; i < PokerConstants.PlayerCount; i++)
             allHandResults[i] = GetBestHand(CardCollection.Union(table.Players[i].Cards, table.CardsAtRiver));
 
         winners.Players[0] = table.Players[0];
         winners.Length = 1;
         var winningHand = allHandResults[0];
 
-        for (var i = 1; i < 5; i++)
+        for (var i = 1; i < PokerConstants.PlayerCount; i++)
         {
             switch (allHandResults[i].CompareTo(winningHand))
             {
@@ -320,7 +320,7 @@ public static class HandChecker
         if (highestPair.IsEmpty)
             return HandResult.Empty;
         
-        // Remove the highest pair and fill the rest of the cards
+        // Remove the highest pair and populate the rest of the cards
         var remainingCards = cards.Except(highestPair);
         var hand = new Hand();
         highestPair.CopyTo(hand, 2);

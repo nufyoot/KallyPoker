@@ -1,6 +1,4 @@
-﻿using System.Net.Security;
-
-namespace KallyPoker.Tests;
+﻿namespace KallyPoker.Tests;
 
 public class CardCollectionTests
 {
