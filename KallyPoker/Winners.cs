@@ -2,6 +2,6 @@
 
 public struct Winners()
 {
-    public PlayerCollection Players = new();
+    public PlayerArray Players = new();
     public int Length = 0;
 }

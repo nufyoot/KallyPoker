@@ -2,5 +2,5 @@
 
 public static class PokerConstants
 {
-    public const int PlayerCount = 9;
+    public const int PlayerCount = 5;
 }

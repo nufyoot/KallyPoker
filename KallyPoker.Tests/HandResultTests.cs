@@ -44,7 +44,7 @@ public class HandResultTests
             table.Players[i] = new Player(i + 1, 100, new Caller(), CardCollection.Parse(handStrings[i]));
 
         var expectedWinningPlayers = winningPlayerString.Split(',').Select(int.Parse).ToArray();
-        var winningHands = HandChecker.GetWinningHands(table);
+        var winningHands = HandChecker.GetWinningHands(table.Players, table.CardsAtRiver);
         Assert.Equal(expectedWinningPlayers.Length, winningHands.Length);
         
         for (var i = 0; i < winningHands.Length; i++)

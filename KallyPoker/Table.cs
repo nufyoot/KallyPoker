@@ -1,11 +1,12 @@
 ﻿namespace KallyPoker;
 
-public struct Table()
+public ref struct Table()
 {
     public CardCollection Flop = CardCollection.Empty;
     public CardCollection Turn = CardCollection.Empty;
     public CardCollection River = CardCollection.Empty;
     public PlayerCollection Players = new();
+    public int DealerSeatNumber = 0;
 
     public void Reset()
     {
@@ -18,6 +19,21 @@ public struct Table()
     public CardCollection CardsAtFlop => Flop;
     public CardCollection CardsAtTurn => CardCollection.Union(Flop, Turn);
     public CardCollection CardsAtRiver => CardCollection.Union(Flop, Turn, River);
+    
+    public PlayerCollection ActivePlayers
+    {
+        get
+        {
+            var result = new PlayerArray();
+            var count = 0;
+            
+            foreach (var player in Players)
+                if (player.Money > 0)
+                    result[count++] = player;
+
+            return new PlayerCollection(result, count);
+        }
+    }
 
     public void DealCards(ReadOnlySpan<Card> cards)
     {

@@ -31,15 +31,15 @@ public static class HandChecker
         return HandResult.OneOf(possibleHands);
     }
 
-    public static Winners GetWinningHands(Table table)
+    public static Winners GetWinningHands(PlayerCollection activePlayers, CardCollection communityCards)
     {
         Span<HandResult> allHandResults = stackalloc HandResult[PokerConstants.PlayerCount];
         var winners = new Winners();
         
         for (var i = 0; i < PokerConstants.PlayerCount; i++)
-            allHandResults[i] = GetBestHand(CardCollection.Union(table.Players[i].Cards, table.CardsAtRiver));
+            allHandResults[i] = GetBestHand(CardCollection.Union(activePlayers[i].Cards, communityCards));
 
-        winners.Players[0] = table.Players[0];
+        winners.Players[0] = activePlayers[0];
         winners.Length = 1;
         var winningHand = allHandResults[0];
 
@@ -53,13 +53,13 @@ public static class HandChecker
                 
                 case 1:
                     // This is a better hand. Reset everything.
-                    winners.Players[0] = table.Players[i];
+                    winners.Players[0] = activePlayers[i];
                     winners.Length = 1;
                     winningHand = allHandResults[i];
                     break;
                 
                 case 0:
-                    winners.Players[winners.Length++] = table.Players[i];
+                    winners.Players[winners.Length++] = activePlayers[i];
                     break;
             }
         }

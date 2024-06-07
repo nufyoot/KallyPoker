@@ -2,15 +2,17 @@
 
 namespace KallyPoker;
 
-[InlineArray(PokerConstants.PlayerCount)]
-public struct PlayerBetCollection
+public ref struct PlayerBetCollection(PlayerBetArray playerBets)
 {
-    private PlayerBet _element0;
-
+    private PlayerBetArray _playerBets = playerBets;
+    public int Count { get; private set; } 
+    
     public PlayerBetCollection(PlayerCollection players)
+        : this(new PlayerBetArray())
     {
-        for (var i = 0; i < PokerConstants.PlayerCount; i++)
-            this[i] = new PlayerBet(players[i]);
+        Count = 0;
+        foreach(var player in players)
+            _playerBets[Count++] = new PlayerBet(player);
     }
 
     public ulong TotalBet
@@ -18,20 +20,50 @@ public struct PlayerBetCollection
         get
         {
             var total = 0UL;
-            foreach (var playerBet in this)
+            foreach (var playerBet in _playerBets)
                 total += playerBet.Bet.GetValueOrDefault();
             return total;
         }
     }
-
-    public ref struct PendingPlayerBetEnumerator(ref PlayerBetCollection playerBets, int startingSeat)
+    
+    public ulong MaxBet
     {
-        private readonly ref PlayerBetCollection _playerBets = ref playerBets;
+        get
+        {
+            var max = 0UL;
+            foreach (var playerBet in _playerBets)
+                max = Math.Max(max, playerBet.Bet.GetValueOrDefault());
+            return max;
+        }
+    }
+    
+    public PlayerCollection ActivePlayers
+    {
+        get
+        {
+            var result = new PlayerArray();
+            var count = 0;
+            
+            foreach (var playerBet in _playerBets)
+                if (playerBet.Player.Money > 0 && playerBet.State != PlayerBet.PlayerBetState.Folded)
+                    result[count++] = playerBet.Player;
+
+            return new PlayerCollection(result, count);
+        }
+    }
+
+    public Enumerator GetEnumerator() => new(ref _playerBets, 0);
+
+    public ref struct Enumerator(ref PlayerBetArray playerBets, int startingSeat)
+    {
+        private readonly ref PlayerBetArray _playerBets = ref playerBets;
         private int _index = startingSeat - 1;
 
-        public PendingPlayerBetEnumerator GetEnumerator() => this;
+        public Enumerator GetEnumerator() => this;
 
         public ref PlayerBet Current => ref _playerBets[_index];
+
+        public void Reset() => _index = startingSeat - 1;
 
         public bool MoveNext()
         {
@@ -60,7 +92,7 @@ public struct PlayerBetCollection
                 // Ok, at this point we've played at least once, we haven't gone all-in, and we have money left.
                 // Determine if we're already matching the max bet. If we are already matching the max bet, 
                 // continue to the next player.
-                if (playerBet.Bet.GetValueOrDefault() == MaxBet)
+                if (playerBet.Bet.GetValueOrDefault() == _playerBets.MaxBet)
                     continue;
                 
                 // At this point, the player hasn't folded, they didn't go all-in, they have money, and their bet
@@ -75,22 +107,5 @@ public struct PlayerBetCollection
             _index = newIndex;
             return true;
         }
-        
-        private ulong MaxBet
-        {
-            get
-            {
-                var max = 0UL;
-                foreach (var playerBet in _playerBets)
-                    max = Math.Max(max, playerBet.Bet.GetValueOrDefault());
-                return max;
-            }
-        }
     }
-}
-
-public static class PlayerBetCollectionExtensions
-{
-    public static PlayerBetCollection.PendingPlayerBetEnumerator EnumeratePendingBets(ref this PlayerBetCollection playerBets, int startingSeat) => 
-        new(ref playerBets, startingSeat);
 }
