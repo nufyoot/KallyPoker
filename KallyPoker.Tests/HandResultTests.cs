@@ -1,6 +1,4 @@
-﻿using KallyPoker.PlayerTypes;
-
-namespace KallyPoker.Tests;
+﻿namespace KallyPoker.Tests;
 
 public class HandResultTests
 {
@@ -25,29 +23,5 @@ public class HandResultTests
         var handResult2 = HandChecker.GetBestHand(cardCollection2);
         
         Assert.Equal(comparison, handResult1.CompareTo(handResult2));
-    }
-
-    [Theory]
-    [InlineData("9D,8D,6C", "8C", "TH", "4", "TD,6H", "QC,5S", "AD,7H", "JS,7C", "JC,4D")]
-    [InlineData("AH,8C,5S", "TH", "8D", "4", "7H,6D", "KH,JS", "KS,JC", "8H,6S", "7S,3D")]
-    [InlineData("QH,JC,5S", "KH", "TC", "4,5", "6D,5C", "JH,TD", "9S,7S", "AD,7H", "AC,JD")]
-    public void TestWinningHand(string flop, string turn, string river, string winningPlayerString, params string[] handStrings)
-    {
-        var table = new Table()
-        {
-            Flop = CardCollection.Parse(flop),
-            Turn = CardCollection.Parse(turn),
-            River = CardCollection.Parse(river)
-        };
-
-        for (var i = 0; i < 5; i++)
-            table.Players[i] = new Player(i + 1, 100, new Caller(), CardCollection.Parse(handStrings[i]));
-
-        var expectedWinningPlayers = winningPlayerString.Split(',').Select(int.Parse).ToArray();
-        var winningHands = HandChecker.GetWinningHands(table.Players, table.CardsAtRiver);
-        Assert.Equal(expectedWinningPlayers.Length, winningHands.Length);
-        
-        for (var i = 0; i < winningHands.Length; i++)
-            Assert.Equal(expectedWinningPlayers[i], winningHands.Players[i].Id);
     }
 }

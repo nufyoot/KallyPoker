@@ -30,42 +30,6 @@ public static class HandChecker
         };
         return HandResult.OneOf(possibleHands);
     }
-
-    public static Winners GetWinningHands(PlayerCollection activePlayers, CardCollection communityCards)
-    {
-        Span<HandResult> allHandResults = stackalloc HandResult[PokerConstants.PlayerCount];
-        var winners = new Winners();
-        
-        for (var i = 0; i < PokerConstants.PlayerCount; i++)
-            allHandResults[i] = GetBestHand(CardCollection.Union(activePlayers[i].Cards, communityCards));
-
-        winners.Players[0] = activePlayers[0];
-        winners.Length = 1;
-        var winningHand = allHandResults[0];
-
-        for (var i = 1; i < PokerConstants.PlayerCount; i++)
-        {
-            switch (allHandResults[i].CompareTo(winningHand))
-            {
-                case -1:
-                    // This hand isn't any better... skip it.
-                    break;
-                
-                case 1:
-                    // This is a better hand. Reset everything.
-                    winners.Players[0] = activePlayers[i];
-                    winners.Length = 1;
-                    winningHand = allHandResults[i];
-                    break;
-                
-                case 0:
-                    winners.Players[winners.Length++] = activePlayers[i];
-                    break;
-            }
-        }
-
-        return winners;
-    }
     
     private static HandResult GetRoyalFlush(CardCollection cards)
     {

@@ -1,10 +1,2 @@
-﻿using BenchmarkDotNet.Running;
-using KallyPoker;
+﻿Console.WriteLine("Test");
 
-#if DEBUG
-var runner = new PokerBenchmarks();
-
-runner.RunTest();
-#else
-BenchmarkRunner.Run<PokerBenchmarks>();
-#endif
