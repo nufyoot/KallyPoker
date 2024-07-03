@@ -34,9 +34,14 @@ public static class HeadsUpHoldem
             if (result.Tied)
                 // If the player and dealer tied, it's a push on all 3
                 total += bet.Ante + bet.Raise + bet.Odds;
-            else if (result.PlayerWins)
-                // If the player wins, they double up on the ante and raise
+            else
+            {
+                if (result.PlayerWins)
+                    // If the player wins, they double up on the ante and raise
+                    total += (2 * bet.Ante) + (2 * bet.Raise);
                 
+                // Figure out the Odds payout
+            }
         }
 
         // Figure out the Odds payout, which only happens if the player entered a raise at some point
