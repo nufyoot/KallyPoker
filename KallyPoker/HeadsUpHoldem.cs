@@ -20,7 +20,7 @@ public static class HeadsUpHoldem
             HandRank.FourKind => result.PlayerWins ? 11 * bet.Odds : 26 * bet.Odds,
             HandRank.StraightFlush => result.PlayerWins ? 51 * bet.Odds : 501 * bet.Odds,
             HandRank.RoyalFlush => 501 * bet.Odds,
-            _ => bet.Odds,
+            _ => 0,
         };
     }
 
@@ -36,18 +36,21 @@ public static class HeadsUpHoldem
                 total += bet.Ante + bet.Raise + bet.Odds;
             else
             {
-                if (result.PlayerWins)
-                    // If the player wins, they double up on the ante and raise
-                    total += (2 * bet.Ante) + (2 * bet.Raise);
+                // If the dealer doesn't qualify, the ante is pushed
+                if (!result.DealerQualifies)
+                    total += bet.Ante;
+                else if (result.PlayerWins)
+                    total += 2 * bet.Ante;
                 
+                
+                // If the player wins, they double up on the raise
+                if (result.PlayerWins)
+                    total += 2 * bet.Raise;
+
                 // Figure out the Odds payout
+                total += CalculateOddsWin(result, bet);
             }
         }
-
-        // Figure out the Odds payout, which only happens if the player entered a raise at some point
-        
-        if (bet.Raise > 0)
-            
         
         // Figure out the Trips Plus payout
         total += result.PlayerHandResult.Rank switch
@@ -70,7 +73,7 @@ public static class HeadsUpHoldem
         else if (result.PlayerHasAceFace)
             total += 11 * bet.PocketBonus;
         else if (result.PlayerHasPocketPair)
-            total += 5 * bet.PocketBonus;
+            total += 6 * bet.PocketBonus;
 
         return total;
     }

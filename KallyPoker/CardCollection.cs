@@ -14,6 +14,12 @@ public readonly struct CardCollection
         _value = value;
     }
 
+    public CardCollection(Span<Card> cards)
+    {
+        foreach (var card in cards)
+            _value |= card;
+    }
+
     public static CardCollection Union(CardCollection first, CardCollection second) => new(first._value | second._value);
 
     public static ErrorTuple<CardCollection> Parse(ReadOnlySpan<char> cards)
